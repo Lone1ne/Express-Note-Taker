@@ -10,4 +10,24 @@ notes.get("/", (req, res) => {
   readFromFile("./db/db.json").then((data) => res.json(JSON.parse(data)));
 });
 
+//POST Route for a new note
+notes.post("/", (req, res) => {
+  console.info(`${req.method} request received to add a note`);
+
+  const { title, text } = req.body;
+
+  if (title && text) {
+    const newNote = {
+      title,
+      text,
+      note_id: uuid(),
+    };
+
+    readAndAppend(newNote, "./db/db.json");
+    res.json("Note added sucessfully");
+  } else {
+    res.json("Error in adding note");
+  }
+});
+
 module.exports = notes;
